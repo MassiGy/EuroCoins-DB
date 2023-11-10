@@ -1,0 +1,10 @@
+DROP TABLE P06_PiecePays CASCADE CONSTRAINTS;
+DROP SEQUENCE seq_pays;
+
+CREATE SEQUENCE seq_pays;
+
+CREATE TABLE P06_PiecePays(
+    PaysID INT DEFAULT seq_pays.nextval PRIMARY KEY,
+    PieceID INTEGER REFERENCES P06_PieceModele(PieceID),
+    PaysNom VARCHAR(250) NOT NULL
+);
