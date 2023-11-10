@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS P06_PieceTranche CASCADE;
+
+CREATE TABLE P06_PieceTranche (
+    TrancheID SERIAL PRIMARY KEY,
+    PieceID INTEGER REFERENCES P06_PieceModele(PieceID),
+    PieceTranche VARCHAR(250) NOT NULL
+);

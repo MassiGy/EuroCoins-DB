@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS P06_PieceTranche CASCADE;
+
+CREATE TABLE P06_PieceTranche (
+    TrancheID INT PRIMARY KEY AUTO_INCREMENT,
+    PieceID INT NOT NULL,
+    PieceTranche VARCHAR(250) NOT NULL,
+
+
+    FOREIGN KEY (PieceID) REFERENCES P06_PieceModele(PieceID)
+);
