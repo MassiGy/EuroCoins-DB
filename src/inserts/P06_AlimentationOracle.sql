@@ -1119,3 +1119,4 @@
     INSERT INTO P06_Collectionner (CollectionneurID, PieceID, QteCollection) VALUES (14, 86, 11);
     INSERT INTO P06_Collectionner (CollectionneurID, PieceID, QteCollection) VALUES (14, 235, 19);
     INSERT INTO P06_Collectionner (CollectionneurID, PieceID, QteCollection) VALUES (14, 228, 18);
+
