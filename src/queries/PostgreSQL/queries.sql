@@ -136,7 +136,7 @@ WHERE PieceTranche = 'gravure sur cannelures fines';
 -- mysql, donc on utilisera NOT IN à la place).
 
 -- cette requête pourra être faite autrement et plus aisément, mais pour cette
--- question on voulais utiliser NOT IN pour illustrer un exemple de son
+-- question on voulais utiliser EXCEPT pour illustrer un exemple de son
 -- utilisation. Par ailleurs, pour ce qui est du sens de cette requête, elle
 -- vise à retrouver toutes les information des pièces qui ont une quantite
 -- frappée >= 1000000; On ignore en quelques sorte les pièce de collection,
@@ -144,11 +144,11 @@ WHERE PieceTranche = 'gravure sur cannelures fines';
 
 SELECT * 
 FROM P06_PieceModele
-WHERE PieceID NOT IN (
-    SELECT PieceID 
-    FROM P06_PieceModele
-    WHERE PieceQuantiteFrappee < 1000000
-);
+EXCEPT
+SELECT * 
+FROM P06_PieceModele
+WHERE PieceQuantiteFrappee < 100000;
+
 
 
 /*------------------------------------      Numero 4     ----------------------------------------*/

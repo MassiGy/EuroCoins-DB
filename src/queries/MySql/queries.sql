@@ -4,7 +4,7 @@
 -- par une lettre entre A et D
 SELECT * 
 FROM P06_Collectionneur 
-WHERE CollectionneurNom ~ '^[A-D]';
+WHERE CollectionneurNom REGEXP '^[A-D]';
 
 
 /*------------------------------------      Numero 2     ----------------------------------------*/
