@@ -141,7 +141,7 @@ GROUP BY PaysNom;
 
 
 -- 8) Donner deux exemples de mise en œuvre de
--- la clause HAVING   
+-- la clause HAVING
 
 -- 9) Donner une requête qui associe sur une même ligne des informations issues de deux
 -- enregistrements différents d’une même table, par exemple deux pays différents, deux
