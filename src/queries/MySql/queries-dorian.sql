@@ -186,7 +186,7 @@ WHERE c1.CollectionneurID = res.MaxID;
 -- ça marche, mais à quoi bon ?
 -- on prends tout les collectionneur qui se 
 -- sont inscrits après au moins un collectionneur
--- avec une vrai collection. (Les parrainnés)
+-- avec une vrai collection. (Les potentiels parrainnés)
 SELECT * 
 FROM P06_Collectionneur 
 WHERE CollectionneurID > ANY (
@@ -208,7 +208,20 @@ WHERE CollectionneurID > ANY (
 
 
 -- g) Sous-requête avec un opérateur de comparaison combiné ALL
-SELECT * FROM P06_Collectionneur WHERE CollectionneurID > ALL (SELECT CollectionneurID FROM P06_Collectionner);
+SELECT * 
+FROM P06_Collectionneur 
+WHERE CollectionneurID > ALL (
+    SELECT CollectionneurID 
+    FROM P06_Collectionner
+);
+
+SELECT * 
+FROM P06_PieceModele 
+WHERE PieceID <> ALL (
+    SELECT PieceID
+    FROM P06_PiecePays
+    WHERE PaysNom = '%France%'
+);
 
 /*----------- Numero 5 -------------*/
 -- Requête avec jointure
