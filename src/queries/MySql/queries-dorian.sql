@@ -225,11 +225,26 @@ WHERE PieceID <> ALL (
 
 /*----------- Numero 5 -------------*/
 -- Requête avec jointure
-SELECT * FROM P06_PieceModele pm JOIN P06_PiecePays pp ON pm.PieceID = pp.PieceID;
+EXPLAIN ANALYZE
+SELECT * 
+FROM P06_PieceModele pm 
+INNER JOIN P06_PiecePays pp 
+ON pm.PieceID = pp.PieceID;
 
 -- Requête équivalente avec sous-requête
-SELECT * FROM P06_PieceModele WHERE PieceID IN (SELECT PieceID FROM P06_PiecePays);
+EXPLAIN ANALYZE
+SELECT * 
+FROM P06_PieceModele 
+WHERE PieceID IN (
+    SELECT PieceID 
+    FROM P06_PiecePays
+);
 
+-- Comparaison: 
+-- la version avec la sous requête est plus rapide
+-- car elle charge moins de donnée vers la ram (lors
+-- de l'étape "FROM"). Par contre, avec la jointure,
+-- on aura plus d'info (colonnes)
 
 /*----------- Numero 6 -------------*/
 -- Exemple 1 : COUNT
