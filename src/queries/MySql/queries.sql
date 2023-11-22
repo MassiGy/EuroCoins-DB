@@ -2,7 +2,7 @@
 -- d'une expression rationnelle (REGEXP) sur un champ
 -- textuel.
 
--- trouver toutes les piece qui ont pour
+-- idée: trouver toutes les piece qui ont pour
 -- version un anniversaire d'un evennement/persone
 -- (NOTE: ceci peut se faire avec un LIKE assez facilement)
 SELECT * FROM P06_PieceModele
@@ -22,7 +22,71 @@ WHERE CollectionneurNom NOT REGEXP "^[E-Z]";
 -- expliquerez pourquoi les résultats sont identiques ou différents
 -- de la jointure interne.
 
+-- EXPLAIN ANALYZE
+SELECT *
+FROM P06_Collectionneur c
+INNER JOIN P06_Collectionner cn
+ON c.CollectionneurID = cn.CollectionneurID;
+-- Execution Time: 25 ms
 
+-- syntax alternative
+-- EXPLAIN ANALYZE
+SELECT *
+FROM P06_Collectionneur c
+NATURAL JOIN P06_Collectionner cn;
+-- Execution Time: 13 ms
+
+-- Jointure externe (gauche)
+-- EXPLAIN ANALYZE
+SELECT *
+FROM P06_Collectionneur c
+LEFT JOIN P06_Collectionner cn
+ON c.CollectionneurID = cn.CollectionneurID;
+-- Execution Time: 40 ms
+
+-- Ici, on va retrouver un enregistrement en
+-- plus des requêtes précedentes, car dans la table
+-- Collectionneur, on retrouve un collectionneur qui
+-- n'a pas de collection. Et étant donné que la table
+-- collectionneur est à gauche du 'LEFT JOIN', donc
+-- tout les enregistrement de cette table se retrouve
+-- dans notre sortie/output même si certain n'ont pas
+-- de correspondent dans la table collectionner
+
+-- Jointure externe (gauche)
+-- EXPLAIN ANALYZE
+SELECT *
+FROM P06_Collectionner c
+LEFT JOIN P06_Collectionneur cn
+ON c.CollectionneurID = cn.CollectionneurID;
+-- Execution Time: 15 ms
+
+-- En changeant l'ordre des tables dans notre
+-- requete de jointure, on retrouve un nombre
+-- de resultats identiques à ceux des requetes
+-- précedentes.
+
+-- Produit cartisien
+
+-- EXPLAIN ANALYZE
+SELECT *
+FROM P06_Collectionneur c, P06_Collectionner cn
+WHERE c.CollectionneurID = cn.CollectionneurID;
+ -- Execution Time: 14 ms
+
+-- On peut aussi implementer le produit cartisien
+-- avec le CROSS JOIN,
+SELECT *
+FROM P06_Collectionner c
+CROSS JOIN P06_Collectionneur cn;
+
+-- Comparaison
+
+-- Comme on le constate, les plus rapides sont
+-- les INNER JOIN et NATURAL JOIN, et puis les LEFT JOIN,
+-- et puis enfin le produit cartisien. Cela se justifie
+-- par le fait que les permiers chargent moins
+-- d'information en memoire (RAM) que les suivants.
 
 -- 3) Donner une requête pour chacun des opérateurs ensemblistes
 -- (UNION, INSERSECT et EXCEPT)
@@ -30,10 +94,10 @@ WHERE CollectionneurNom NOT REGEXP "^[E-Z]";
 -- pour UNION
 -- dans notre cas, l'operateur UNION nous aide pas forcement
 -- à retrouver une information spécifique plus aisément que
--- ce qui aurait était fait avec autre chose. L'UNION est
--- très appreciable quand on a des tables différentes avec
+-- ce qui aurait était fait avec autre chose. L'UNION est 
+-- très appreciable quand on a des tables différentes avec 
 -- des colonnes en commun. Par exemple, Supplier, Employee et
--- Customer sont des tables qui ont toutes des information
+-- Customer sont des tables qui ont toutes des information 
 -- sur le nom, prenom, email. Donc, on pourra retrouver
 -- toute la démograhpie d'une entreprise avec un simple UNION.
 
@@ -48,8 +112,6 @@ SELECT *
 FROM P06_PieceModele
 WHERE PieceVersion LIKE "%Championnat%";
 
-
-
 -- pour EXCEPT/MINUS
 -- (NOTE: il y a pas d'operateur EXCEPT/MINUS pour mysql,
 -- donc on utilisera NOT IN à la place).
@@ -61,14 +123,14 @@ WHERE PieceVersion LIKE "%Championnat%";
 -- elle vise à retrouver toutes les information des pièces
 -- qui ont une quantite frappée >= 1000000; On ignore en quelques
 -- sorte les pièce de collection, rare et d'anniversaire.
-SELECT *
+
+SELECT * 
 FROM P06_PieceModele
 WHERE PieceID NOT IN (
-    SELECT PieceID
+    SELECT PieceID 
     FROM P06_PieceModele
     WHERE PieceQuantiteFrappee < 1000000
 );
-
 
 -- Pour INTERSECT
 
@@ -80,7 +142,6 @@ WHERE PieceID NOT IN (
 -- une base de donnée ou on a deux table Supplier, Customer
 -- qui contiennent des colonne
 
--- Inutile mais pas le choix : Donner avec un INTERSECT,
 -- Les modèles de pièces émisent en Allemagne possédant une tranche
 -- "gravure sur cannelures fines"
 
@@ -130,7 +191,7 @@ WHERE PaysNom = "France";
 -- a. Donner le nombre total de pièces que possède chaque collectionneur
 
 SELECT C.*, SUM(QteCollection) AS NbPiece
-FROM P06_Collectionneur C NATURAL JOIN P06_Collectionner
+FROM P06_Collectionneur C LEFT JOIN P06_Collectionner ON C.CollectionneurID = P06_Collectionner.CollectionneurID
 GROUP BY CollectionneurID;
 
 -- b. Donner le nombre de modèle de pièce que possède chaque pays

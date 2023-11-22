@@ -1,11 +1,23 @@
+<<<<<<< HEAD
 Partie 3 du Projet SGBD:
 
 L'idee de cette partie du projet est de faire une sorte de revision/check sur notre maitrise
+=======
+Partie 3 du Projet SGBD: 
+
+L'idee de cette partie du projet est de faire une sorte de revision/check sur notre maitrise 
+>>>>>>> fc5bdb75799ded7d9b54aa6013ff4ccb912d9e36
 des operateurs SQL classiques.
 
 Pour cela, les question ont pour but de nous faire exercer un operateur donnée, et puis de mettre
 en place une requête qui l'implemente après d'avoir expliquer son sens.
 
 Attention, dans certain cas les operateurs ne sont pas adéquats/utiles dans le context de notre base
+<<<<<<< HEAD
 de données. Par conséquent, il faut donner un autre exemple pour le même operateur dans le context
 d'une autre base de donnée de notre choix, sans oublier le code/exemple pour notre base de donnée à nous.
+=======
+de données. Par conséquent, il faut donner un autre exemple pour le même operateur dans le context 
+d'une autre base de donnée de notre choix, sans oublier le code/exemple pour notre base de donnée à nous.
+
+>>>>>>> fc5bdb75799ded7d9b54aa6013ff4ccb912d9e36

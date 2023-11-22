@@ -44,4 +44,9 @@
 | CollectionneurID | int  | NO   | PRI | NULL    |       |
 | PieceID          | int  | NO   | PRI | NULL    |       |
 | QteCollection    | int  | NO   |     | NULL    |       |
+<<<<<<< HEAD
 +------------------+------+------+-----+---------+-------+
+=======
++------------------+------+------+-----+---------+-------+
+
+>>>>>>> fc5bdb75799ded7d9b54aa6013ff4ccb912d9e36
