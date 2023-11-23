@@ -84,8 +84,6 @@ SELECT *
 FROM P06_PieceModele PM
 INNER JOIN P06_PieceTranche PT ON PM.PieceID = PT.PieceID;
 
-
-
 -- natual join
 SELECT *
 FROM P06_PieceModele
@@ -255,12 +253,12 @@ WHERE PieceTranche = 'gravure sur cannelures fines';
 -- collection, rare et d'anniversaire.
 
 SELECT * 
+FROM P06_PieceModele 
+MINUS 
+SELECT PieceID 
 FROM P06_PieceModele
-WHERE PieceID NOT IN (
-    SELECT PieceID 
-    FROM P06_PieceModele
-    WHERE PieceQuantiteFrappee < 1000000
-);
+WHERE PieceQuantiteFrappee < 1000000  
+;
 
 
 /*------------------------------------      Numero 4     ----------------------------------------*/
@@ -372,7 +370,7 @@ JOIN (
 SELECT *
 FROM P06_Collectionneur C
 NATURAL JOIN P06_Collectionner CN
-WHERE CN.PieceID IN (
+WHERE CN.PieceID ANY (
     SELECT PieceID
     FROM P06_PieceModele
     WHERE PieceValeur > 100
@@ -389,8 +387,8 @@ AND C.CollectionneurPrenom = 'Stefan';
 -- sont pas produit en France.
 SELECT *
 FROM P06_PieceModele PM
-WHERE NOT EXISTS (
-    SELECT 1
+WHERE PieceID <> ALL (
+    SELECT PP.PieceID
     FROM P06_PiecePays PP
     WHERE PP.PieceID = PM.PieceID
     AND PP.PaysNom LIKE '%France%'
@@ -518,7 +516,7 @@ SELECT
     C2.CollectionneurNom AS Nom2,
     C2.CollectionneurPrenom AS Prenom2
 FROM 
-    P06_Collectionneur C1
+    P06_Collectionneur C1 
 JOIN 
     P06_Collectionneur C2
 ON 
