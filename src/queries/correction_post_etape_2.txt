@@ -1,0 +1,10 @@
+# Observations suite à l'étape 2:
+
+
+*On a pas pu utiliser/mettre en place le insert all dans oracle, et on a
+utiliser insert into a la place ce qui a causer un problème de performance.
+*Aussi, dans le gdoc, on a mentionné plus de check in/contraintes sur les
+attributs, et on a décider de pas les mettre en place en pratique afin de pas
+trop nous mettre des battons dans les roues pour la suite.
+
+
