@@ -410,7 +410,7 @@ WHERE PieceID <> ALL (
     FROM P06_PiecePays AS PP
     WHERE PaysNom LIKE '%France%'
 );
-
+No
 /*------------------------------------      Numero 5     ----------------------------------------*/
 -- Requête avec jointure
 
