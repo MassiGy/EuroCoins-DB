@@ -1,3 +1,5 @@
+/************************************* TRIGGER SUR TOUTE LA LIGNE             */
+
 -- Trigger avant INSERT sur P06_Collectionneur
 CREATE OR REPLACE FUNCTION P06_before_insert_collectionneur()
 RETURNS TRIGGER AS $$
@@ -46,9 +48,32 @@ FOR EACH ROW
 EXECUTE FUNCTION P06_before_update_piece_modele();
 
 
+/************************************* TRIGGER SUR TOUTE LA TABLE             ***********/
 
+-- Trigger après INSERT sur P06_PieceModele
+CREATE OR REPLACE FUNCTION P06_after_insert_piece_modele()
+RETURNS TRIGGER AS $$
+DECLARE
+    moyenneVals Real;
+BEGIN
+    -- recalcule de la moyenne des valeurs.
+    SELECT AVG(PieceValeur)
+    INTO moyenneVals
+    FROM P06_PieceModele;
+    
+    -- afficher cela dans un message
+    RAISE NOTICE 'Nouvelle moyenne des valeurs: %', moyenneVals;
 
+    -- continuer la trasaction/insertion
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
+-- Créer le trigger après INSERT
+CREATE TRIGGER P06_after_insert_piecemodele_trigger
+AFTER INSERT ON P06_PieceModele
+FOR EACH STATEMENT
+EXECUTE FUNCTION P06_after_insert_piece_modele();
 
 
 
