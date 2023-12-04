@@ -1,3 +1,6 @@
+
+
+-- changer le nom et le prenom d'un collectionneur
 CREATE OR REPLACE PROCEDURE PO6_EditerDonnees(
     p_CollectionneurID INTEGER,
     p_NouveauNom VARCHAR,
@@ -15,6 +18,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+
+-- trouver la valeur d'une piece partant de son identifiant
 CREATE OR REPLACE FUNCTION P06_ObtenirValeur(
     p_PieceID INTEGER
 )
@@ -39,6 +44,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+-- trouver toutes les piece produites par un pays donnée
 CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParPays(
     p_PaysNom VARCHAR
 )
@@ -72,12 +78,12 @@ $$ LANGUAGE plpgsql;
 
 
 
+-- trouver toutes les pieces qui ont une taille entre deux valeurs données
 CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParTaille(
     p_TailleMin INTEGER,
     p_TailleMax INTEGER
 )
 RETURNS SETOF P06_PieceModele AS $$
-
 DECLARE
     row P06_PieceModele ;
     cursor CURSOR (tmin INTEGER, tmax INTEGER) FOR (
@@ -86,56 +92,27 @@ DECLARE
         WHERE PieceID IN (
             SELECT PieceID
             FROM P06_PieceCaracteristique
-            WHERE PieceTaille BETWEEN tmin AND tmax;
+            WHERE PieceTaille BETWEEN tmin AND tmax
         )
     );
     
 BEGIN
 
-    OPEN 
+    FOR row in cursor(p_TailleMin, p_TailleMax)
+    LOOP
+        RETURN NEXT row;
+    END LOOP;
 
-
-
-
-
-
-
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-
-
-
-CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParTaille(
-    p_TailleMin IN INTEGER,
-    p_TailleMax IN INTEGER
-)
-RETURNS SYS_REFCURSOR
-IS
-    v_Cursor SYS_REFCURSOR;
-BEGIN
-    OPEN v_Cursor FOR
-    SELECT *
-    FROM P06_PieceCaracteristique
-    WHERE PieceTaille BETWEEN p_TailleMin AND p_TailleMax;
-
-    RETURN v_Cursor;
+    RETURN;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
+        RAISE NOTICE 'Aucun enregistrements trouvés avec l''interval de tailles indiqué.';
+        RETURN;
     WHEN OTHERS THEN
-        -- Gestion des exceptions : affichage de l'erreur ou traitement spécifique
-        DBMS_OUTPUT.PUT_LINE('Une erreur s''est produite lors de la selection.');
-        RETURN NULL;
+        RAISE NOTICE 'Erreur lors de la selections.';
+        RETURN;
 END;
-/
-
-
-
-
-
+$$ LANGUAGE plpgsql;
 
 
 

@@ -1,3 +1,5 @@
+
+-- procedure pour changer le nom et le prenom d'un collectionneur partant de son ID
 CREATE OR REPLACE PROCEDURE P06_EditerDonnees(
     p_CollectionneurID IN NUMBER,
     p_NouveauNom IN VARCHAR,
@@ -8,7 +10,7 @@ BEGIN
     UPDATE P06_Collectionneur
     SET CollectionneurNom = p_NouveauNom, CollectionneurPrenom = p_NouveauPrenom
     WHERE CollectionneurID = p_CollectionneurID;
-    COMMIT;
+
 EXCEPTION
     WHEN OTHERS THEN
         -- Gestion des exceptions : affichage de l'erreur ou traitement spécifique
@@ -21,6 +23,7 @@ END;
 /
 
 
+-- function qui retourne la valeur d'un modele de piece partant de son ID  
 CREATE OR REPLACE FUNCTION P06_ObtenirValeur(
     p_PieceID IN NUMBER
 )
@@ -45,51 +48,78 @@ END;
 /
 
 
+
+-- pour les fonction "table" on doit créer un type sous oracle
+CREATE TYPE set_piece_modele as TABLE OF P06_PieceModele;
+
+-- function qui retroune un ensemble de piece produite dans un pays donnée
 CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParPays(
     p_PaysNom IN VARCHAR
 )
-RETURNS SYS_REFCURSOR
+RETURNS set_piece_modele PIPELINED 
 IS
-    v_Cursor SYS_REFCURSOR;
+    row P06_PieceModele%ROWTYPE; 
 BEGIN
-    OPEN v_Cursor FOR
-    SELECT pm.*
-    FROM P06_PieceModele pm
-    JOIN P06_PiecePays pp ON pm.PieceID = pp.PieceID
-    WHERE pp.PaysNom = p_PaysNom;
+    FOR row IN (
+        SELECT * 
+        FROM P06_PieceModele
+        WHERE PieceID IN (
+            SELECT PieceID
+            FROM P06_PiecePays
+            WHERE PiecePays = p_PaysNom
+        )
+    ) LOOP 
+        PIPE ROW (row) 
+    END LOOP;
 
-    RETURN v_Cursor;
+    RETURN;
+
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
+        RETURN;
     WHEN OTHERS THEN
         -- Gestion des exceptions : affichage de l'erreur ou traitement spécifique
         DBMS_OUTPUT.PUT_LINE('Une erreur s''est produite lors de la selection.');
-        RETURN NULL;
+        RETURN;
 END;
 /
 
-
+-- fonction qui retourne un ensemble de piece par interval de taille
 CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParTaille(
     p_TailleMin IN NUMBER,
     p_TailleMax IN NUMBER
 )
-RETURNS SYS_REFCURSOR
+RETURNS set_piece_modele PIPELINED 
 IS
-    v_Cursor SYS_REFCURSOR;
-BEGIN
-    OPEN v_Cursor FOR
-    SELECT *
-    FROM P06_PieceCaracteristique
-    WHERE PieceTaille BETWEEN p_TailleMin AND p_TailleMax;
+    row P06_PieceModele%ROWTYPE;
 
-    RETURN v_Cursor;
+    v_Cursor CURSOR (tmin NUMBER, tmax NUMBER) IS (
+        SELECT * 
+        FROM P06_PieceModele
+        WHERE PieceID IN (
+            SELECT PieceID
+            FROM P06_PieceCaracteristique
+            WHERE PieceTaille BETWEEN tmin AND tmax
+        )
+    );
+    
+BEGIN
+
+    FOR row in cursor(p_TailleMin, p_TailleMax)
+    LOOP
+        PIPE ROW(row);
+    END LOOP;
+
+    RETURN;
+
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
+        RETURN;
     WHEN OTHERS THEN
         -- Gestion des exceptions : affichage de l'erreur ou traitement spécifique
         DBMS_OUTPUT.PUT_LINE('Une erreur s''est produite lors de la selection.');
-        RETURN NULL;
+        RETURN;
 END;
 /
+
+
