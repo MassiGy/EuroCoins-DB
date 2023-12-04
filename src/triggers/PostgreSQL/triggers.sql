@@ -18,7 +18,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Créer le trigger avant INSERT
-CREATE OR REPLACE TRIGGER P06_before_insert_collectionneur_trigger
+CREATE TRIGGER P06_before_insert_collectionneur_trigger
 BEFORE INSERT ON P06_Collectionneur
 FOR EACH ROW
 EXECUTE FUNCTION P06_before_insert_collectionneur();
@@ -42,7 +42,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Créer le trigger avant UPDATE
-CREATE OR REPLACE TRIGGER P06_before_update_piece_modele_trigger
+-- (NOTE: CREATE OR REPLACE ne marche pas sur toutes les versions
+-- de postgresql.)
+CREATE TRIGGER P06_before_update_piece_modele_trigger
 BEFORE UPDATE ON P06_PieceModele
 FOR EACH ROW
 EXECUTE FUNCTION P06_before_update_piece_modele();
@@ -67,7 +69,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Créer le trigger après INSERT
-CREATE OR REPLACE TRIGGER P06_after_insert_piecemodele_trigger
+CREATE TRIGGER P06_after_insert_piecemodele_trigger
 AFTER INSERT ON P06_PieceModele
 FOR EACH STATEMENT
 EXECUTE FUNCTION P06_after_insert_piece_modele();

@@ -1,8 +1,8 @@
 -- Start by creating the database
-CREATE DATABASE IF NOT EXISTS P06_Euro;
+-- CREATE DATABASE IF NOT EXISTS P06_Euro;
 
 -- switch to it
-\c P06_Euro;
+-- \c P06_Euro;
 
 
 -- CREATE THE TABLES;
@@ -20,18 +20,15 @@ CREATE DATABASE IF NOT EXISTS P06_Euro;
 -- CREATE THE VIEWS
 \i  ../views/PostgreSQL/views.sql;
 
+-- INSERT THE DATA (note: you can insert before
+-- creating the triggers to speed things up)
+\i  ../inserts/P06_AlimentationPostgresql.sql;
+
 -- CREATE THE FUNCTIONS
 \i  ../functions/PostgreSQL/functions.sql;
 
 -- CREATE THE TRIGGERS
 \i  ../triggers/PostgreSQL/triggers.sql;
-
-
--- INSERT THE DATA (note: you can insert before
--- creating the triggers to speed things up)
-\i  ../inserts/P06_AlimentationPostgresql.sql;
-
-
 
 
 

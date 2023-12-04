@@ -85,7 +85,7 @@ CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParTaille(
 )
 RETURNS SETOF P06_PieceModele AS $$
 DECLARE
-    row P06_PieceModele ;
+    row P06_PieceModele;
     cursor CURSOR (tmin INTEGER, tmax INTEGER) FOR (
         SELECT * 
         FROM P06_PieceModele
