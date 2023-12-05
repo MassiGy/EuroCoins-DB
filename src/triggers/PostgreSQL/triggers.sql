@@ -65,6 +65,7 @@ BEGIN
     
     -- afficher cela dans un message
     RAISE NOTICE 'Nouvelle moyenne des valeurs: %', moyenneVals;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 

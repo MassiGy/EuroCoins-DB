@@ -8,7 +8,7 @@ DROP TRIGGER P06_before_update_piece_modele_trigger;
 DROP TRIGGER P06_after_insert_piecemodele_trigger;
 
 --- DROP ALL THE FUNCTIONS IF ANY 
-DROP PROCEDURE PO6_EditerDonnees;
+DROP PROCEDURE P06_EditerDonnees;
 DROP FUNCTION P06_ObtenirValeur;
 DROP FUNCTION P06_ObtenirPiecesParPays;
 DROP FUNCTION P06_ObtenirPiecesParTaille;
@@ -42,7 +42,7 @@ DROP SEQUENCE seq_tranche;
 
 
 --- DROP THE DATABASE
-DROP DATABASE P06_Euro;
+-- DROP DATABASE P06_Euro;
 
 
 

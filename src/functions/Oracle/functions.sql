@@ -27,7 +27,7 @@ END;
 CREATE OR REPLACE FUNCTION P06_ObtenirValeur(
     p_PieceID IN NUMBER
 )
-RETURNS NUMBER
+RETURN NUMBER
 IS
     v_Valeur NUMBER;
 BEGIN
@@ -56,7 +56,7 @@ CREATE TYPE set_piece_modele as TABLE OF P06_PieceModele;
 CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParPays(
     p_PaysNom IN VARCHAR
 )
-RETURNS set_piece_modele PIPELINED 
+RETURN set_piece_modele PIPELINED
 IS
     row P06_PieceModele%ROWTYPE; 
 BEGIN
@@ -69,7 +69,7 @@ BEGIN
             WHERE PiecePays = p_PaysNom
         )
     ) LOOP 
-        PIPE ROW (row) 
+        PIPE ROW (row);
     END LOOP;
 
     RETURN;
@@ -89,12 +89,12 @@ CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParTaille(
     p_TailleMin IN NUMBER,
     p_TailleMax IN NUMBER
 )
-RETURNS set_piece_modele PIPELINED 
+RETURN set_piece_modele PIPELINED
 IS
     row P06_PieceModele%ROWTYPE;
 
-    v_Cursor CURSOR (tmin NUMBER, tmax NUMBER) IS (
-        SELECT * 
+    CURSOR v_Cursor (tmin NUMBER, tmax NUMBER) IS (
+        SELECT *
         FROM P06_PieceModele
         WHERE PieceID IN (
             SELECT PieceID
