@@ -13,7 +13,9 @@ DROP FUNCTION P06_ObtenirValeur;
 DROP FUNCTION P06_ObtenirPiecesParPays;
 DROP FUNCTION P06_ObtenirPiecesParTaille;
 
-
+-- DROP ALL TYPES IF ANY
+DROP TYPE set_piece_modele;
+DROP TYPE rec_P06_PieceModele;
 
 --- DROP ALL THE VIEWS IF ANY
 DROP VIEW P06_CollectionneursInfos;

@@ -120,7 +120,7 @@ CREATE OR REPLACE VIEW P06_PiecesNonPossedees AS
 
 -- procedure pour changer le nom et le prenom d'un collectionneur partant de son ID
 CREATE OR REPLACE PROCEDURE P06_EditerDonnees(
-    p_CollectionneurID IN NUMBER,
+    p_CollectionneurID IN INT,
     p_NouveauNom IN VARCHAR,
     p_NouveauPrenom IN VARCHAR
 )
@@ -144,11 +144,11 @@ END;
 
 -- function qui retourne la valeur d'un modele de piece partant de son ID
 CREATE OR REPLACE FUNCTION P06_ObtenirValeur(
-    p_PieceID IN NUMBER
+    p_PieceID IN INT
 )
 RETURN NUMBER
 IS
-    v_Valeur NUMBER;
+    v_Valeur INT;
 BEGIN
     SELECT PieceValeur INTO v_Valeur
     FROM P06_PieceModele
@@ -166,10 +166,9 @@ EXCEPTION
 END;
 /
 
-
-
 -- pour les fonction "table" on doit créer un type sous oracle
-CREATE TYPE set_piece_modele as TABLE OF P06_PieceModele;
+CREATE TYPE rec_P06_PieceModele AS OBJECT(PieceID INT, PieceVersion VARCHAR(200), PieceValeur INTEGER, PieceDateFrappee DATE, PieceQuantiteFrappee NUMBER);
+CREATE TYPE set_piece_modele AS TABLE OF rec_P06_PieceModele;
 
 -- function qui retroune un ensemble de piece produite dans un pays donnée
 CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParPays(
@@ -177,9 +176,10 @@ CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParPays(
 )
 RETURN set_piece_modele PIPELINED
 IS
-    row P06_PieceModele%ROWTYPE;
+    line P06_PieceModele%ROWTYPE;
+    row rec_P06_PieceModele := rec_P06_PieceModele(NULL, NULL, NULL, NULL, NULL);
 BEGIN
-    FOR row IN (
+    FOR line IN (
         SELECT *
         FROM P06_PieceModele
         WHERE PieceID IN (
@@ -188,6 +188,11 @@ BEGIN
             WHERE PaysNom = p_PaysNom
         )
     ) LOOP
+        row.PieceID := line.PieceID;
+        row.PieceVersion := line.PieceVersion;
+        row.PieceValeur := line.PieceValeur;
+        row.PieceDateFrappee := line.PieceDateFrappee;
+        row.PieceQuantiteFrappee := line.PieceQuantiteFrappee;
         PIPE ROW (row);
     END LOOP;
 
@@ -210,7 +215,8 @@ CREATE OR REPLACE FUNCTION P06_ObtenirPiecesParTaille(
 )
 RETURN set_piece_modele PIPELINED
 IS
-    row P06_PieceModele%ROWTYPE;
+    line P06_PieceModele%ROWTYPE;
+    row rec_P06_PieceModele := rec_P06_PieceModele(NULL, NULL, NULL, NULL, NULL);
 
     CURSOR v_Cursor (tmin NUMBER, tmax NUMBER) IS (
         SELECT *
@@ -224,8 +230,13 @@ IS
 
 BEGIN
 
-    FOR row in v_Cursor(p_TailleMin, p_TailleMax)
+    FOR line in v_Cursor(p_TailleMin, p_TailleMax)
     LOOP
+        row.PieceID := line.PieceID;
+        row.PieceVersion := line.PieceVersion;
+        row.PieceValeur := line.PieceValeur;
+        row.PieceDateFrappee := line.PieceDateFrappee;
+        row.PieceQuantiteFrappee := line.PieceQuantiteFrappee;
         PIPE ROW(row);
     END LOOP;
 
@@ -281,7 +292,7 @@ CREATE OR REPLACE TRIGGER P06_after_insert_piecemodele_trigger
 AFTER INSERT ON P06_PieceModele
 -- FOR EACH STATEMENT           -- pas besoin, ceci est l'action par défaut.
 DECLARE
-    moyenneVals Real;
+    moyenneVals REAL;
 BEGIN
     -- recalcule de la moyenne des valeurs.
     SELECT AVG(PieceValeur)
@@ -294,5 +305,3 @@ BEGIN
 END;
 /
 
-CALL P06_ObtenirValeur(8);
-CALL P06_ObtenirPiecesParPays('Allemagne');
