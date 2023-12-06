@@ -38,7 +38,7 @@ CREATE OR REPLACE TRIGGER P06_after_insert_piecemodele_trigger
 AFTER INSERT ON P06_PieceModele
 -- FOR EACH STATEMENT           -- pas besoin, ceci est l'action par défaut.
 DECLARE
-    moyenneVals Real;
+    moyenneVals REAL;
 BEGIN
     -- recalcule de la moyenne des valeurs.
     SELECT AVG(PieceValeur)
@@ -50,3 +50,33 @@ BEGIN
     RETURN;
 END;
 /
+
+-- PROTOTYPE
+-- Trigger avant INSERT sur P06_Collectionner qui a pour but de incrémenter la valeur
+-- qteCollection si le couple PieceID et CollectionneurID est déjà dans la table
+/**
+CREATE OR REPLACE TRIGGER P06_before_insert_collectionner_trigger
+BEFORE INSERT ON P06_Collectionner
+FOR EACH ROW
+DECLARE
+    line P06_Collectionner%ROWTYPE;
+BEGIN
+    FOR line IN ( SELECT *
+    FROM P06_Collectionner
+    WHERE CollectionneurID = :NEW.CollectionneurID AND PieceID = :NEW.PieceID)
+    LOOP
+        IF line.PieceID IS NOT NULL THEN
+            UPDATE P06_Collectionner
+            SET QteCollection = QteCollection + :NEW.QteCollection
+            WHERE CollectionneurID = :NEW.CollectionneurID AND PieceID = :NEW.PieceID;
+
+            :NEW.CollectionneurID := NULL;
+            :NEW.PieceID := NULL;
+            :NEW.QteCollection := NULL;
+
+        ELSE
+            RETURN;
+        END IF;
+    END LOOP;
+END;
+*/
