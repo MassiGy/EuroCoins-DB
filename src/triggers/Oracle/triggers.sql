@@ -4,10 +4,10 @@
 -- Trigger avant INSERT sur P06_Collectionneur
 CREATE OR REPLACE TRIGGER P06_before_insert_collectionneur_trigger
 BEFORE INSERT ON P06_Collectionneur
-FOR EACH ROW 
+FOR EACH ROW
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('Insertion d''un nouveau collectionneur avec nom : % et prénom : %', NEW.CollectionneurNom, NEW.CollectionneurPrenom);
-    RETURN :new
+    DBMS_OUTPUT.PUT_LINE('Insertion d''un nouveau collectionneur avec nom : ' || :NEW.CollectionneurNom || ' et prénom : ' || :NEW.CollectionneurPrenom);
+    RETURN;
 END;
 /
 
@@ -19,14 +19,14 @@ FOR EACH ROW
 BEGIN
     -- Actions avant la mise à jour d'une ligne
     -- Exemple : vérifications ou modifications des valeurs
-    
+
     -- Pour l'exemple, afficher un message avant la mise à jour
-    DBMS_OUTPUT.PUT_LINE('Mise à jour de la pièce avec ID : %', NEW.PieceID);
-    
+    DBMS_OUTPUT.PUT_LINE('Mise à jour de la pièce avec ID : ' || :NEW.PieceID);
+
     -- Vous pouvez effectuer d'autres opérations ici
-    
+
     -- Renvoyer la ligne à mettre à jour
-    RETURN :new;
+    RETURN;
 END;
 /
 
@@ -44,11 +44,9 @@ BEGIN
     SELECT AVG(PieceValeur)
     INTO moyenneVals
     FROM P06_PieceModele;
-    
+
     -- afficher cela dans un message
-    DBMS_OUTPUT.PUT_LINE('Nouvelle moyenne des valeurs: %', moyenneVals);
+    DBMS_OUTPUT.PUT_LINE('Nouvelle moyenne des valeurs: ' || moyenneVals);
+    RETURN;
 END;
 /
-
-
-
