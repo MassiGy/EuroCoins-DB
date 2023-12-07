@@ -1,8 +1,8 @@
 -- Start by creating the database
--- CREATE DATABASE IF NOT EXISTS P06_Euro;
+CREATE DATABASE IF NOT EXISTS P06_Euro;
 
 -- switch to it
--- USE P06_Euro;
+USE P06_Euro;
 
 
 -- CREATE THE TABLES;
