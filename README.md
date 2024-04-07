@@ -13,5 +13,6 @@ This miss-conception was fixed in a later project that consisted of creating a s
 this database. 
 
 Link to correction & second project: https://github.com/MassiGy/phpsymfony-EuroCoins-DB-Crud
+
 Checkout the readme for more info.
 
