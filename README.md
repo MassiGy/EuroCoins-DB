@@ -10,6 +10,8 @@ This database setup is wrong in regards of relationships setup. The primary/fore
   primary keys as foriegn keys and not the other way around.
 
 This miss-conception was fixed in a later project that consisted of creating a simple web app using Symfony to interface
-this database.
+this database. 
 
+Link to correction & second project: https://github.com/MassiGy/phpsymfony-EuroCoins-DB-Crud
+Checkout the readme for more info.
 
